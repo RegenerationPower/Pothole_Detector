@@ -161,7 +161,12 @@ void ComplementaryFilter(float accelX, float gyroX, float accelY, float gyroY, f
   MPU6050_Data.Y = COMP_FILTER_ALPHA * (gyroY + accelY) + (1 - COMP_FILTER_ALPHA) * prevY;
   MPU6050_Data.Z = COMP_FILTER_ALPHA * (gyroZ + accelZ) + (1 - COMP_FILTER_ALPHA) * prevZ;
 
-  printf("X: %f, Y: %f, Z: %f\r\n", MPU6050_Data.X, MPU6050_Data.Y, MPU6050_Data.Z);
+  //printf("X: %f, Y: %f, Z: %f\r\n", MPU6050_Data.X, MPU6050_Data.Y, MPU6050_Data.Z);
+  printf("%1.f; %1.f; %1.f\n", MPU6050_Data.X, MPU6050_Data.Y, MPU6050_Data.Z);
+  //printf("Message ok\n");
+  //printf("%1.f\r\n", MPU6050_Data.X);
+  //printf("%1.f\r\n", MPU6050_Data.Y);
+  //printf("%1.f\r\n", MPU6050_Data.Z);
 }
 
 int main(void)
@@ -172,7 +177,7 @@ int main(void)
   MX_I2C2_Init();
   MX_USART1_UART_Init();
   MPU6050_Init();
-
+  //printf("X, Y, Z\r\n");
   while (1) {
     MPU6050_Read_Accel();
     MPU6050_Read_Gyro();
@@ -187,7 +192,7 @@ int main(void)
     prevZ = MPU6050_Data.Z;
 
     // TEMP
-    HAL_Delay(1000);
+    HAL_Delay(100);
 
   }
 }

@@ -31,21 +31,21 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  13 .debug_info   00009af2  00000000  00000000  00020254  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_abbrev 0000184e  00000000  00000000  00029d46  2**0
+ 14 .debug_abbrev 00001861  00000000  00000000  00029d46  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_aranges 000009a8  00000000  00000000  0002b598  2**3
+ 15 .debug_aranges 000009a8  00000000  00000000  0002b5a8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_rnglists 0000078a  00000000  00000000  0002bf40  2**0
+ 16 .debug_rnglists 0000078a  00000000  00000000  0002bf50  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  00017e4b  00000000  00000000  0002c6ca  2**0
+ 17 .debug_macro  00017e4b  00000000  00000000  0002c6da  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   0000c1f0  00000000  00000000  00044515  2**0
+ 18 .debug_line   0000c1f0  00000000  00000000  00044525  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    00086b4a  00000000  00000000  00050705  2**0
+ 19 .debug_str    00086b4a  00000000  00000000  00050715  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_frame  00003bc4  00000000  00000000  000d7250  2**2
+ 20 .debug_frame  00003bc4  00000000  00000000  000d7260  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 0000006f  00000000  00000000  000dae14  2**0
+ 21 .debug_line_str 0000006f  00000000  00000000  000dae24  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -2148,7 +2148,8 @@ void ComplementaryFilter(float accelX, float gyroX, float accelY, float gyroY, f
  8001640:	4a18      	ldr	r2, [pc, #96]	; (80016a4 <ComplementaryFilter+0x16c>)
  8001642:	6093      	str	r3, [r2, #8]
 
-  printf("X: %f, Y: %f, Z: %f\r\n", MPU6050_Data.X, MPU6050_Data.Y, MPU6050_Data.Z);
+  //printf("X: %f, Y: %f, Z: %f\r\n", MPU6050_Data.X, MPU6050_Data.Y, MPU6050_Data.Z);
+  printf("%1.f; %1.f; %1.f\n", MPU6050_Data.X, MPU6050_Data.Y, MPU6050_Data.Z);
  8001644:	4b17      	ldr	r3, [pc, #92]	; (80016a4 <ComplementaryFilter+0x16c>)
  8001646:	681b      	ldr	r3, [r3, #0]
  8001648:	4618      	mov	r0, r3
@@ -2173,6 +2174,10 @@ void ComplementaryFilter(float accelX, float gyroX, float accelY, float gyroY, f
  8001678:	464b      	mov	r3, r9
  800167a:	480d      	ldr	r0, [pc, #52]	; (80016b0 <ComplementaryFilter+0x178>)
  800167c:	f003 f97a 	bl	8004974 <iprintf>
+  //printf("Message ok\n");
+  //printf("%1.f\r\n", MPU6050_Data.X);
+  //printf("%1.f\r\n", MPU6050_Data.Y);
+  //printf("%1.f\r\n", MPU6050_Data.Z);
 }
  8001680:	bf00      	nop
  8001682:	3710      	adds	r7, #16
@@ -2210,7 +2215,7 @@ int main(void)
  80016ce:	f000 f923 	bl	8001918 <MX_USART1_UART_Init>
   MPU6050_Init();
  80016d2:	f7ff fcf9 	bl	80010c8 <MPU6050_Init>
-
+  //printf("X, Y, Z\r\n");
   while (1) {
     MPU6050_Read_Accel();
  80016d6:	f7ff fd4d 	bl	8001174 <MPU6050_Read_Accel>
@@ -2350,11 +2355,12 @@ int main(void)
  8001800:	6013      	str	r3, [r2, #0]
 
     // TEMP
-    HAL_Delay(1000);
- 8001802:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
- 8001806:	f000 fae1 	bl	8001dcc <HAL_Delay>
+    HAL_Delay(100);
+ 8001802:	2064      	movs	r0, #100	; 0x64
+ 8001804:	f000 fae2 	bl	8001dcc <HAL_Delay>
     MPU6050_Read_Accel();
- 800180a:	e764      	b.n	80016d6 <main+0x1e>
+ 8001808:	e765      	b.n	80016d6 <main+0x1e>
+ 800180a:	bf00      	nop
  800180c:	f3af 8000 	nop.w
  8001810:	54442d18 	.word	0x54442d18
  8001814:	400921fb 	.word	0x400921fb
@@ -6429,7 +6435,7 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  8003a5a:	bf00      	nop
  8003a5c:	40022000 	.word	0x40022000
  8003a60:	40021000 	.word	0x40021000
- 8003a64:	0800807c 	.word	0x0800807c
+ 8003a64:	08008078 	.word	0x08008078
  8003a68:	20000000 	.word	0x20000000
  8003a6c:	20000004 	.word	0x20000004
 
@@ -6503,8 +6509,8 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  8003b02:	bf00      	nop
  8003b04:	40021000 	.word	0x40021000
  8003b08:	007a1200 	.word	0x007a1200
- 8003b0c:	08008094 	.word	0x08008094
- 8003b10:	080080a4 	.word	0x080080a4
+ 8003b0c:	08008090 	.word	0x08008090
+ 8003b10:	080080a0 	.word	0x080080a0
  8003b14:	003d0900 	.word	0x003d0900
 
 08003b18 <HAL_RCC_GetHCLKFreq>:
@@ -6533,7 +6539,7 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  8003b48:	4618      	mov	r0, r3
  8003b4a:	bd80      	pop	{r7, pc}
  8003b4c:	40021000 	.word	0x40021000
- 8003b50:	0800808c 	.word	0x0800808c
+ 8003b50:	08008088 	.word	0x08008088
 
 08003b54 <HAL_RCC_GetPCLK2Freq>:
  8003b54:	b580      	push	{r7, lr}
@@ -6550,7 +6556,7 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  8003b70:	4618      	mov	r0, r3
  8003b72:	bd80      	pop	{r7, pc}
  8003b74:	40021000 	.word	0x40021000
- 8003b78:	0800808c 	.word	0x0800808c
+ 8003b78:	08008088 	.word	0x08008088
 
 08003b7c <RCC_Delay>:
  8003b7c:	b480      	push	{r7}
@@ -7424,11 +7430,11 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  8004358:	e7ee      	b.n	8004338 <_printf_float+0x2a8>
  800435a:	bf00      	nop
  800435c:	7fefffff 	.word	0x7fefffff
- 8004360:	080080a6 	.word	0x080080a6
- 8004364:	080080aa 	.word	0x080080aa
- 8004368:	080080ae 	.word	0x080080ae
- 800436c:	080080b2 	.word	0x080080b2
- 8004370:	080080b6 	.word	0x080080b6
+ 8004360:	080080a2 	.word	0x080080a2
+ 8004364:	080080a6 	.word	0x080080a6
+ 8004368:	080080aa 	.word	0x080080aa
+ 800436c:	080080ae 	.word	0x080080ae
+ 8004370:	080080b2 	.word	0x080080b2
  8004374:	9a0e      	ldr	r2, [sp, #56]	; 0x38
  8004376:	6da3      	ldr	r3, [r4, #88]	; 0x58
  8004378:	429a      	cmp	r2, r3
@@ -7911,8 +7917,8 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  8004804:	2500      	movs	r5, #0
  8004806:	f104 0619 	add.w	r6, r4, #25
  800480a:	e7f5      	b.n	80047f8 <_printf_i+0x228>
- 800480c:	080080b8 	.word	0x080080b8
- 8004810:	080080c9 	.word	0x080080c9
+ 800480c:	080080b4 	.word	0x080080b4
+ 8004810:	080080c5 	.word	0x080080c5
 
 08004814 <std>:
  8004814:	2300      	movs	r3, #0
@@ -8890,15 +8896,15 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  80050fc:	3fc68a28 	.word	0x3fc68a28
  8005100:	509f79fb 	.word	0x509f79fb
  8005104:	3fd34413 	.word	0x3fd34413
- 8005108:	080080e7 	.word	0x080080e7
- 800510c:	080080fe 	.word	0x080080fe
+ 8005108:	080080e3 	.word	0x080080e3
+ 800510c:	080080fa 	.word	0x080080fa
  8005110:	7ff00000 	.word	0x7ff00000
- 8005114:	080080e3 	.word	0x080080e3
- 8005118:	080080da 	.word	0x080080da
- 800511c:	080080b7 	.word	0x080080b7
+ 8005114:	080080df 	.word	0x080080df
+ 8005118:	080080d6 	.word	0x080080d6
+ 800511c:	080080b3 	.word	0x080080b3
  8005120:	3ff80000 	.word	0x3ff80000
  8005124:	080081e8 	.word	0x080081e8
- 8005128:	08008156 	.word	0x08008156
+ 8005128:	08008152 	.word	0x08008152
  800512c:	2301      	movs	r3, #1
  800512e:	930b      	str	r3, [sp, #44]	; 0x2c
  8005130:	e7d4      	b.n	80050dc <_dtoa_r+0x2ac>
@@ -9768,9 +9774,9 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  80059e4:	f73f aeb5 	bgt.w	8005752 <_dtoa_r+0x922>
  80059e8:	e7b1      	b.n	800594e <_dtoa_r+0xb1e>
  80059ea:	bf00      	nop
- 80059ec:	08008156 	.word	0x08008156
- 80059f0:	080080b6 	.word	0x080080b6
- 80059f4:	080080da 	.word	0x080080da
+ 80059ec:	08008152 	.word	0x08008152
+ 80059f0:	080080b2 	.word	0x080080b2
+ 80059f4:	080080d6 	.word	0x080080d6
 
 080059f8 <_free_r>:
  80059f8:	b538      	push	{r3, r4, r5, lr}
@@ -10051,8 +10057,8 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  8005c60:	e9c0 3303 	strd	r3, r3, [r0, #12]
  8005c64:	e7f7      	b.n	8005c56 <_Balloc+0x66>
  8005c66:	bf00      	nop
- 8005c68:	080080e7 	.word	0x080080e7
- 8005c6c:	08008167 	.word	0x08008167
+ 8005c68:	080080e3 	.word	0x080080e3
+ 8005c6c:	08008163 	.word	0x08008163
 
 08005c70 <_Bfree>:
  8005c70:	b570      	push	{r4, r5, r6, lr}
@@ -10080,8 +10086,8 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  8005ca4:	6021      	str	r1, [r4, #0]
  8005ca6:	f843 4022 	str.w	r4, [r3, r2, lsl #2]
  8005caa:	bd70      	pop	{r4, r5, r6, pc}
- 8005cac:	080080e7 	.word	0x080080e7
- 8005cb0:	08008167 	.word	0x08008167
+ 8005cac:	080080e3 	.word	0x080080e3
+ 8005cb0:	08008163 	.word	0x08008163
 
 08005cb4 <__multadd>:
  8005cb4:	e92d 41f0 	stmdb	sp!, {r4, r5, r6, r7, r8, lr}
@@ -10135,8 +10141,8 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  8005d30:	6125      	str	r5, [r4, #16]
  8005d32:	4620      	mov	r0, r4
  8005d34:	e8bd 81f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, pc}
- 8005d38:	08008156 	.word	0x08008156
- 8005d3c:	08008167 	.word	0x08008167
+ 8005d38:	08008152 	.word	0x08008152
+ 8005d3c:	08008163 	.word	0x08008163
 
 08005d40 <__hi0bits>:
  8005d40:	0c02      	lsrs	r2, r0, #16
@@ -10229,8 +10235,8 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  8005dfa:	6103      	str	r3, [r0, #16]
  8005dfc:	bd10      	pop	{r4, pc}
  8005dfe:	bf00      	nop
- 8005e00:	08008156 	.word	0x08008156
- 8005e04:	08008167 	.word	0x08008167
+ 8005e00:	08008152 	.word	0x08008152
+ 8005e04:	08008163 	.word	0x08008163
 
 08005e08 <__multiply>:
  8005e08:	e92d 4ff0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, lr}
@@ -10348,8 +10354,8 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  8005f4a:	e79a      	b.n	8005e82 <__multiply+0x7a>
  8005f4c:	3e01      	subs	r6, #1
  8005f4e:	e79c      	b.n	8005e8a <__multiply+0x82>
- 8005f50:	08008156 	.word	0x08008156
- 8005f54:	08008167 	.word	0x08008167
+ 8005f50:	08008152 	.word	0x08008152
+ 8005f54:	08008163 	.word	0x08008163
 
 08005f58 <__pow5mult>:
  8005f58:	e92d 43f8 	stmdb	sp!, {r3, r4, r5, r6, r7, r8, r9, lr}
@@ -10418,8 +10424,8 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  8005ffa:	e8bd 83f8 	ldmia.w	sp!, {r3, r4, r5, r6, r7, r8, r9, pc}
  8005ffe:	bf00      	nop
  8006000:	080082b0 	.word	0x080082b0
- 8006004:	080080e7 	.word	0x080080e7
- 8006008:	08008167 	.word	0x08008167
+ 8006004:	080080e3 	.word	0x080080e3
+ 8006008:	08008163 	.word	0x08008163
 
 0800600c <__lshift>:
  800600c:	e92d 47f0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, lr}
@@ -10498,8 +10504,8 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  80060d6:	d8f9      	bhi.n	80060cc <__lshift+0xc0>
  80060d8:	e7ea      	b.n	80060b0 <__lshift+0xa4>
  80060da:	bf00      	nop
- 80060dc:	08008156 	.word	0x08008156
- 80060e0:	08008167 	.word	0x08008167
+ 80060dc:	08008152 	.word	0x08008152
+ 80060e0:	08008163 	.word	0x08008163
 
 080060e4 <__mcmp>:
  80060e4:	4603      	mov	r3, r0
@@ -10628,8 +10634,8 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  8006226:	e7de      	b.n	80061e6 <__mdiff+0xca>
  8006228:	3f01      	subs	r7, #1
  800622a:	e7e8      	b.n	80061fe <__mdiff+0xe2>
- 800622c:	08008156 	.word	0x08008156
- 8006230:	08008167 	.word	0x08008167
+ 800622c:	08008152 	.word	0x08008152
+ 8006230:	08008163 	.word	0x08008163
 
 08006234 <__d2b>:
  8006234:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
@@ -10697,8 +10703,8 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  80062ce:	f7ff fd37 	bl	8005d40 <__hi0bits>
  80062d2:	ebc0 1041 	rsb	r0, r0, r1, lsl #5
  80062d6:	e7e2      	b.n	800629e <__d2b+0x6a>
- 80062d8:	08008156 	.word	0x08008156
- 80062dc:	08008167 	.word	0x08008167
+ 80062d8:	08008152 	.word	0x08008152
+ 80062dc:	08008163 	.word	0x08008163
 
 080062e0 <__sfputc_r>:
  80062e0:	6893      	ldr	r3, [r2, #8]
