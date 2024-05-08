@@ -366,6 +366,24 @@
         <number>8</number>
     </property>
    </widget>
+   <widget class="QPushButton" name="settingsButton">
+    <property name="geometry">
+     <rect>
+      <x>1050</x>
+      <y>10</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/gear-icon.png</normaloff>
+     </iconset>
+    </property>
+    <property name="toolTip">
+     <string>Settings</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
