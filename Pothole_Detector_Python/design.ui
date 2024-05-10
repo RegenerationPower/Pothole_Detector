@@ -304,55 +304,6 @@
      <string>Save data</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="units_list">
-    <property name="geometry">
-     <rect>
-      <x>750</x>
-      <y>440</y>
-      <width>111</width>
-      <height>21</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="units">
-    <property name="geometry">
-     <rect>
-      <x>690</x>
-      <y>440</y>
-      <width>61</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>units</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="sensitive">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>410</y>
-      <width>61</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>sensitivity = </string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="sensitive_Value">
-    <property name="geometry">
-     <rect>
-      <x>750</x>
-      <y>410</y>
-      <width>111</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0.06</string>
-    </property>
-   </widget>
    <widget class="QLCDNumber" name="lcdNumber">
     <property name="geometry">
         <rect>
@@ -377,7 +328,7 @@
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>img/gear-icon.png</normaloff>
+      <normaloff>img/moon-icon.png</normaloff>
      </iconset>
     </property>
     <property name="toolTip">

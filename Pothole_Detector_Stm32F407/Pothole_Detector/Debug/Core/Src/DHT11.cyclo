@@ -1,3 +1,1 @@
-../Core/Src/DHT11.c:8:13:goToOutput	1
-../Core/Src/DHT11.c:24:13:goToInput	1
-../Core/Src/DHT11.c:37:10:DHT_getData	14
+../Core/Src/DHT11.c:6:10:DHT_getData	13

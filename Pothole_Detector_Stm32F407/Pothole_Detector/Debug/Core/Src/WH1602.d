@@ -1,6 +1,5 @@
 Core/Src/WH1602.o: ../Core/Src/WH1602.c ../Core/Inc/WH1602.h \
- ../Core/Inc/WH1602_Config.h ../Core/Inc/main.h \
- ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
+ ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \
@@ -32,7 +31,6 @@ Core/Src/WH1602.o: ../Core/Src/WH1602.c ../Core/Inc/WH1602.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
  ../Core/Inc/DHT11.h ../Core/Inc/WH1602.h
 ../Core/Inc/WH1602.h:
-../Core/Inc/WH1602_Config.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
