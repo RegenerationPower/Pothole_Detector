@@ -24,14 +24,17 @@ static LCD_Options lcdOptions;
 #define DISPLAY_ON           0x04
 #define TWO_LINE               0x08
 
+// Затримка в мікросекундах
 void Delay_us(uint16_t us)
 {
 	uint32_t division = (SysTick->LOAD + 1) / 1000;
 	uint32_t startUs = HAL_GetTick() * 1000 + (1000 - SysTick->VAL / division);
 	while ((HAL_GetTick() * 1000 + (1000 - SysTick->VAL / division) - startUs
-			< us));
+			< us))
+		;
 }
 
+// Надсилання команди у 4-бітному режимі
 static void sendCommand4bit(uint8_t cmd)
 {
 	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, (GPIO_PinState) (cmd & 0x08));
@@ -70,11 +73,13 @@ void displayOn(void)
 	sendCommand(DISPLAY_CONTROL | lcdOptions.displayControl);
 }
 
+// Виведення рядка на дисплей
 void LCD_PutString(uint8_t x, uint8_t y, char *str)
 {
 	setCursor(x, y);
 	while (*str)
 	{
+		// Перевірка чи не виходить курсор за межі рядка
 		if (lcdOptions.X >= COLUMNS)
 		{
 			lcdOptions.X = 0;
@@ -109,6 +114,7 @@ void LCD_Clear(void)
 
 void LCD_Init(void)
 {
+	// Затримка для стабілізації після включення живлення
 	while (HAL_GetTick() < 200)
 	{
 		HAL_Delay(1);
@@ -117,7 +123,8 @@ void LCD_Init(void)
 	lcdOptions.X = 0;
 	lcdOptions.Y = 0;
 	lcdOptions.displayFunction = TWO_LINE;
-	// Attemps to set 4 bit mode
+
+	// Спроби встановити 4-бітний режим
 	sendCommand4bit(0x03);
 	HAL_Delay(20);
 
@@ -130,12 +137,14 @@ void LCD_Init(void)
 	sendCommand4bit(0x02);
 	HAL_Delay(20);
 
+	// Встановлення функціонального режиму дисплея
 	sendCommand(FUNCTION_SET | lcdOptions.displayFunction);
 
 	lcdOptions.displayControl = DISPLAY_ON;
 	displayOn();
 	LCD_Clear();
 
+	// Встановлення режиму вводу
 	lcdOptions.displayMode = ENTRY_LEFT;
 	sendCommand(ENTRY_SET | lcdOptions.displayMode);
 	HAL_Delay(20);

@@ -7,8 +7,8 @@ typedef struct
 {
 	float humidity;
 	float temperature;
-} DHT_data;
+} DHT_Data;
 
-DHT_data DHT_getData(void);
+DHT_Data DHT_getData(void);
 
-#endif
+#endif /* DHT11_H_ */

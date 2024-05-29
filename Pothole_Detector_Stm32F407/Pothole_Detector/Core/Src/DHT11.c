@@ -1,35 +1,38 @@
 #include "DHT11.h"
 
-#define DHT_timeout 10000
+#define DHT_Timeout 10000
 #define readPin()		(HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_11) == GPIO_PIN_SET)
 
-DHT_data DHT_getData()
+DHT_Data DHT_getData()
 {
 	uint16_t timeout = 0;
-	DHT_data data =
+	DHT_Data data =
 	{ 0.0f, 0.0f };
 	GPIO_InitTypeDef GPIO_InitStruct =
 	{ 0 };
 	uint8_t rawData[5] =
 	{ 0, 0, 0, 0, 0 };
 
+	// Налаштування GPIO на вихід
 	GPIO_InitStruct.Pin = GPIO_PIN_11;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
 	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
+	// Ініціалізація датчика
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_RESET);
 	HAL_Delay(20);
-
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
 
+	// Налаштування GPIO на вхід
 	GPIO_InitStruct.Pin = GPIO_PIN_11;
 	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
+	// Очікування початку відповіді від датчика
 	while (readPin())
 	{
 		timeout++;
-		if (timeout > DHT_timeout)
+		if (timeout > DHT_Timeout)
 		{
 			return data;
 		}
@@ -39,7 +42,7 @@ DHT_data DHT_getData()
 	while (!readPin())
 	{
 		timeout++;
-		if (timeout > DHT_timeout)
+		if (timeout > DHT_Timeout)
 		{
 			return data;
 		}
@@ -49,13 +52,14 @@ DHT_data DHT_getData()
 	while (readPin())
 	{
 		timeout++;
-		if (timeout > DHT_timeout)
+		if (timeout > DHT_Timeout)
 		{
 			return data;
 
 		}
 	}
-	// Reading answer from DH11
+
+	// Зчитування даних з датчика
 	for (uint8_t i = 0; i < 5; i++)
 	{
 		for (uint8_t j = 7; j != 255; j--)
@@ -79,6 +83,7 @@ DHT_data DHT_getData()
 		}
 	}
 
+	// Перевірка контрольної суми і запис даних
 	if ((uint8_t) (rawData[0] + rawData[1] + rawData[2] + rawData[3])
 			== rawData[4])
 	{

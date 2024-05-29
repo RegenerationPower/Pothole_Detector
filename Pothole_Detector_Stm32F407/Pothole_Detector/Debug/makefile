@@ -68,7 +68,7 @@ main-build: Pothole_Detector.elf secondary-outputs
 
 # Tool invocations
 Pothole_Detector.elf Pothole_Detector.map: $(OBJS) $(USER_OBJS) C:\Users\dmitr\Documents\Pothole_Detector_Project\Pothole_Detector_Stm32F407\Pothole_Detector\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Pothole_Detector.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\dmitr\Documents\Pothole_Detector_Project\Pothole_Detector_Stm32F407\Pothole_Detector\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Pothole_Detector.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+	arm-none-eabi-gcc -o "Pothole_Detector.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\dmitr\Documents\Pothole_Detector_Project\Pothole_Detector_Stm32F407\Pothole_Detector\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Pothole_Detector.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
