@@ -431,3 +431,78 @@ Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\dmitr\Documen
 
 !ENTRY org.eclipse.cdt.core 1 0 2024-03-05 14:08:10.100
 !MESSAGE Indexed 'lis3dsh' (36 sources, 150 headers) in 1.97 sec: 14,549 declarations; 58,594 references; 2 unresolved inclusions; 42 syntax errors; 145 unresolved names (0.2%)
+!SESSION 2024-04-12 19:49:03.248 -----------------------------------------------
+eclipse.buildId=Version 1.13.0
+java.version=17.0.6
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-04-12 19:49:43.557
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-04-12 19:49:43.565
+!MESSAGE Log4j2 initialized with config file C:\Users\dmitr\Documents\Pothole_Detector_Project\Pothole_Detector_Stm32\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-04-12 19:49:51.147
+!MESSAGE Started RMI Server, listening on port 41337
+!SESSION 2024-04-12 20:00:48.516 -----------------------------------------------
+eclipse.buildId=Version 1.13.0
+java.version=17.0.6
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  C:\Users\dmitr\Documents\Pothole_Detector_Project\Pothole_Detector_Stm32\Pothole_Detector\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\dmitr\Documents\Pothole_Detector_Project\Pothole_Detector_Stm32\Pothole_Detector\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-04-12 20:01:04.713
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-04-12 20:01:04.719
+!MESSAGE Log4j2 initialized with config file C:\Users\dmitr\Documents\Pothole_Detector_Project\Pothole_Detector_Stm32\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-04-12 20:01:11.599
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2024-04-12 20:01:15.600
+!MESSAGE Indexed 'Pothole_Detector' (19 sources, 109 headers) in 3.81 sec: 9,343 declarations; 43,880 references; 2 unresolved inclusions; 36 syntax errors; 188 unresolved names (0.35%)
+!SESSION 2024-05-01 17:57:05.008 -----------------------------------------------
+eclipse.buildId=Version 1.13.0
+java.version=17.0.6
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  C:\Users\dmitr\Documents\Pothole_Detector_Project\Pothole_Detector_Stm32\Pothole_Detector\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\dmitr\Documents\Pothole_Detector_Project\Pothole_Detector_Stm32\Pothole_Detector\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-05-01 17:57:26.649
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-05-01 17:57:26.657
+!MESSAGE Log4j2 initialized with config file C:\Users\dmitr\Documents\Pothole_Detector_Project\Pothole_Detector_Stm32\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-05-01 17:57:38.569
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2024-05-01 17:57:42.065
+!MESSAGE Indexed 'Pothole_Detector' (19 sources, 109 headers) in 3.31 sec: 9,343 declarations; 43,880 references; 2 unresolved inclusions; 36 syntax errors; 188 unresolved names (0.35%)
+!SESSION 2024-05-05 17:50:24.974 -----------------------------------------------
+eclipse.buildId=Version 1.13.0
+java.version=17.0.6
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  C:\Users\dmitr\Documents\Pothole_Detector_Project\Pothole_Detector_Stm32\Pothole_Detector\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\dmitr\Documents\Pothole_Detector_Project\Pothole_Detector_Stm32\Pothole_Detector\.project
+
+!ENTRY org.eclipse.core.resources 2 10035 2024-05-05 17:52:16.850
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-05-05 17:52:20.552
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-05-05 17:52:20.560
+!MESSAGE Log4j2 initialized with config file C:\Users\dmitr\Documents\Pothole_Detector_Project\Pothole_Detector_Stm32\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-05-05 17:52:32.041
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2024-05-05 17:52:36.092
+!MESSAGE Indexed 'Pothole_Detector' (19 sources, 109 headers) in 3.83 sec: 9,343 declarations; 43,880 references; 2 unresolved inclusions; 36 syntax errors; 188 unresolved names (0.35%)

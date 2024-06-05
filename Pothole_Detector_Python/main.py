@@ -1,175 +1,227 @@
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
-from PyQt5.QtCore import QIODevice
+from PyQt5.QtCore import QIODevice, QTimer, QTime, Qt
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel
+import pyqtgraph as pg
 from csv import writer
-from PyQt5.QtCore import QTimer, QTime
+import tensorflow as tf
+import numpy as np
 
+class MainWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(MainWindow, self).__init__()
+        uic.loadUi("design.ui", self)
+        self.setWindowTitle("SerialGUI")
 
+        # Налаштування таймера для оновлення часу
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_time)
+        self.timer.start(1000)  # Оновлення кожну секунду
 
-"""Налаштування програми з графічним інтерфейсом"""
-app = QtWidgets.QApplication([])
-ui = uic.loadUi("design.ui")
-ui.setWindowTitle("SerialGUI")
+        self.serial = QSerialPort()
+        self.serial.setBaudRate(115200)
+        port_list = [port.portName() for port in QSerialPortInfo().availablePorts()]
+        self.comL.addItems(port_list)
 
-timer = QTimer()
+        self.listValue = [[], [], [], [], [], []]  # список значень з MPU-6050, плюс для label, latitude, longitude
+        self.physicalListValue = [[], [], []]  # список значень з MPU-6050, приведених до фізичних величин
+        self.label_status = "smooth"  # Значення за замовчуванням для label
+        self.manual_mode = False  # Режим ручного керування
 
-def updateTime():
-    current_time = QTime.currentTime()
-    ui.lcdNumber.display(current_time.toString('hh:mm:ss'))
+        self.serial.readyRead.connect(self.on_read)
 
-# Connect the QTimer's timeout signal to updateTime function
-timer.timeout.connect(updateTime)
+        self.openB.clicked.connect(self.on_open)
+        self.clearB.clicked.connect(self.clear_graph)
+        self.closeB.clicked.connect(self.on_close)
+        self.outputButton.clicked.connect(self.save_data)
+        self.settingsButton.clicked.connect(self.toggle_dark_theme)
+        self.modeButton.clicked.connect(self.toggle_mode)
+        self.modeButton.setStyleSheet("background-color: blue; color: white;")
 
-# Set the interval for the QTimer (in milliseconds)
-timer.start(1000)  # Update every second
+        self.set_graph_theme("dark")
+        self.toggle_dark_theme()
 
-"""Встановлення налаштовунь для роботи з послідовним портом"""
-serial = QSerialPort()
-serial.setBaudRate(115200)
-portList = []
-ports = QSerialPortInfo().availablePorts()
-for port in ports:
-    portList.append(port.portName())
-ui.comL.addItems(portList)
+        # Завантаження навченої моделі
+        self.model = tf.keras.models.load_model('pothole_detection_model.keras')
 
-"""Фіксуємо значення фізичних величин та встанволюємо значення за-замовчуванням"""
-ui.units_list.addItems(["mg", "g", "m/s2"])
-uint = "mg"
-sensitivity = 0.06
+    # Оновлення часу на інтерфейсі
+    def update_time(self):
+        current_time = QTime.currentTime()
+        self.lcdNumber.display(current_time.toString('hh:mm:ss'))
 
-"""глобальні змінні для збереження даних"""
-listValue = [[], [], []]  # список значень з акселерометра
-physicalListValue = [[], [], []]  # список значень з акселерометра, приведенних до фізичних величин
+    # Опитування COM Port
+    def on_read(self):
+        rx = self.serial.readLine()
+        rxs = str(rx, 'utf-8').strip()
+        print(rxs)
 
-received_message = ""
-data = 0
-def onRead():
-    """Постійно опитує порт, працює безперервно"""
+        # Розділення даних на MPU-6050 та GPS
+        if rxs.startswith('Latitude'):
+            self.handle_gps_data(rxs)
+        else:
+            self.handle_mpu_data(rxs)
 
-    """отримуємо дані та переводимо до зручного вигляду"""
-    global received_message, data
-    rx = serial.readAll()
-    print("RX:", rx)
-    rxs = str(rx, 'utf-8')
-    print("RXS:", rxs)
-    received_message += rxs
-    if '\n' in received_message:
-        complete_message, remainder = received_message.split('\n', 1)
-        data = [int(i) for i in complete_message.split(";") if i.strip()]
-        print("Data:", data)
-        received_message = remainder.strip()
-        """фіксуємо поточні отриманні значення"""
-        global listValue
+    # Обробка даних з MPU-6050
+    def handle_mpu_data(self, rxs):
+        try:
+            data = [int(i) for i in rxs.split(";")]
+        except ValueError:
+            print("Invalid sensor data format")
+            return
+
+        # Отримуємо дані з MPU-6050
         for i in range(len(data)):
-            listValue[i].append(data[i])
-        print(data)
-    #data = [int(i) for i in rxs.split(";")]
+            self.listValue[i].append(data[i])
 
+        # Передбачення дороги за допомогою навченої моделі або ручного режиму
+        if not self.manual_mode:
+            prediction = self.model.predict(np.array([data]))
+            label = 'pothole' if prediction < 0.5 else 'smooth'
+        else:
+            label = self.label_status
 
+        self.listValue[3].append(label)
 
+        # Оновлення інтерфейсу, позначки "яма" "не яма"
+        self.statusLabel.setText(f"Status: {label}")
+        if label == 'pothole':
+            self.statusLabel.setStyleSheet("background-color: red; color: white;")
+        else:
+            self.statusLabel.setStyleSheet("background-color: green; color: white;")
 
-
-    """фіксуємо обрані фізичні величини"""
-    global uint
-    global sensitivity
-    if ui.units_list.currentText() != uint:
-        """якщо було змінено значення фізичних одиниць, то перерарахувати та встановити нові значення."""
-        clearGraph()
-        uint = ui.units_list.currentText()
-        if uint == "g":
-            ui.label_uintsX.setText("g")
-            ui.label_uintsY.setText("g")
-            ui.label_uintsZ.setText("g")
-            # sensitivity = 0.00006
-            sensitivity = 1
-            ui.sensitive_Value.setText(str(sensitivity))
-        if uint == "mg":
-            ui.label_uintsX.setText("mg")
-            ui.label_uintsY.setText("mg")
-            ui.label_uintsZ.setText("mg")
-            sensitivity = 0.06
-            ui.sensitive_Value.setText(str(sensitivity))
-        if uint == "m/s2":
-            ui.label_uintsX.setText("m/s2")
-            ui.label_uintsY.setText("m/s2")
-            ui.label_uintsZ.setText("m/s2")
-            sensitivity = 0.000588399
-            ui.sensitive_Value.setText(str(sensitivity))
-
-    """Перетворюємо отримані дані до фізичних величин"""
-    global physicalListValue
-    physicData = []
-    if data != 0:
+        # Перетворення отриманих даних до фізичних величин
+        phisic_data = []
         for i in range(len(data)):
-            physicData.append(data[i] * sensitivity)
+            phisic_data.append(data[i])
         for i in range(3):
-            physicalListValue[i].append(physicData[i])
+            self.physicalListValue[i].append(phisic_data[i])
 
-        """Виводимо дані у додатку"""
-        ui.Xlabel.setText("X: {: .4f}".format(physicData[0]))
-        ui.Ylabel.setText("Y: {: .4f}".format(physicData[1]))
-        ui.Zlabel.setText("Z: {: .4f}".format(physicData[2]))
+        # Виведення даних на інтерфейс
+        self.Xlabel.setText(f"X: {phisic_data[0]}")
+        self.Ylabel.setText(f"Y: {phisic_data[1]}")
+        self.Zlabel.setText(f"Z: {phisic_data[2]}")
 
-        """Встановлюємо дані для гістограми"""
-        ui.XBar.setValue(round(data[0] / 150))
-        ui.YBar.setValue(round(data[1] / 150))
-        ui.ZBar.setValue(round(data[2] / 150))
+        # Генерація даних осі Х для побудови графіка
+        axis_x = [j for j in range(len(self.physicalListValue[0]))]
 
-        """Генеруємо данні осі Х  для побудови графіка"""
-        xAxis = [j for j in range(len(physicalListValue[i]))]
+        self.graph.clear()
 
-        """Очищаємо старий графік"""
-        ui.graph.clear()
+        # Вимкнення/увімкнення певних осей координат
+        if self.XcheckBox.isChecked():
+            self.graph.plot(axis_x, self.physicalListValue[0], pen=(0, 3))
+        if self.YcheckBox.isChecked():
+            self.graph.plot(axis_x, self.physicalListValue[1], pen=(1, 3))
+        if self.ZcheckBox.isChecked():
+            self.graph.plot(axis_x, self.physicalListValue[2], pen=(2, 3))
 
-        """Будуємо нові графіки згідно встановленних чекбоксів"""
-        if ui.XcheckBox.isChecked():
-            ui.graph.plot(xAxis, physicalListValue[0], pen=(0, 3))
-        if ui.YcheckBox.isChecked():
-            ui.graph.plot(xAxis, physicalListValue[1], pen=(1, 3))
-        if ui.ZcheckBox.isChecked():
-            ui.graph.plot(xAxis, physicalListValue[2], pen=(2, 3))
+    # Отримуємо дані з GPS
+    def handle_gps_data(self, rxs):
+        parts = rxs.split(', ')
+        latitude = parts[0].split(': ')[1]
+        longitude = parts[1].split(': ')[1]
+
+        self.listValue[4].append(latitude)
+        self.listValue[5].append(longitude)
+
+        self.latitudeLabel.setText(f"Latitude: {latitude}")
+        self.longitudeLabel.setText(f"Longitude: {longitude}")
+
+    # Відкривання COM Port
+    def on_open(self):
+        self.serial.setPortName(self.comL.currentText())
+        self.serial.open(QIODevice.ReadWrite)
+
+    # Закривання COM Port
+    def on_close(self):
+        self.serial.close()
+
+    # Очищення графіку і даних
+    def clear_graph(self):
+        self.graph.clear()
+        self.physicalListValue = [[], [], []]
+        self.listValue = [[], [], [], [], [], []]
+
+    # Збереження даних з MPU-6050 у файл .csv
+    def save_data(self):
+        my_data = [["X", "Y", "Z", "Label"]]
+        for i in range(len(self.listValue[0])):
+            my_data.append([self.listValue[0][i], self.listValue[1][i], self.listValue[2][i], self.listValue[3][i]])
+        with open('data.csv', 'w', newline='') as my_file:
+            writ = writer(my_file)
+            writ.writerows(my_data)
+        print("Saving complete")
+
+    # Переключення між світлою та темною темами
+    def toggle_dark_theme(self):
+        dark_theme = """
+        QMainWindow {
+            background-color: #2b2b2b;
+            color: white;
+        }
+        QLabel, QCheckBox, QPushButton {
+            color: white;
+        }
+        QPushButton {   
+            background-color: #444444;
+            border: 1px solid #666666;
+            padding: 3px;
+        }
+        QComboBox {
+            background-color: #444444;
+            border: 1px solid #666666;
+            color: white;
+        }
+        QComboBox QAbstractItemView {
+            background-color: #2b2b2b;
+            color: white;
+        }
+        """
+        light_theme = ""
+
+        if self.styleSheet() == "":
+            self.setStyleSheet(dark_theme)
+            self.set_graph_theme("dark")
+        else:
+            self.setStyleSheet(light_theme)
+            self.set_graph_theme("light")
+
+    # Встановлення теми для графіка
+    def set_graph_theme(self, theme):
+        if theme == "dark":
+            self.graph.setBackground('k')
+            self.graph.getAxis('left').setPen('w')
+            self.graph.getAxis('bottom').setPen('w')
+        else:
+            self.graph.setBackground('w')
+            self.graph.getAxis('left').setPen('k')
+            self.graph.getAxis('bottom').setPen('k')
+
+    # Ручний режим визначення ями при утримуванні клавіші T(повинна бути включена англійська розкладка клавіатури)
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_T:
+            self.label_status = "pothole"
+            self.statusLabel.setText("Status: pothole")
+            self.statusLabel.setStyleSheet("background-color: red; color: white;")
+
+    #
+    def keyReleaseEvent(self, event):
+        if event.key() == Qt.Key_T:
+            self.label_status = "smooth"
+            self.statusLabel.setText("Status: smooth")
+            self.statusLabel.setStyleSheet("background-color: green; color: white;")
+
+    # Перемикання між автоматичним та ручним режимами
+    def toggle_mode(self):
+        self.manual_mode = not self.manual_mode
+        if self.manual_mode:
+            self.modeButton.setText("Switch to Automatic Mode")
+            self.modeButton.setStyleSheet("background-color: yellow; color: black;")
+        else:
+            self.modeButton.setText("Switch to Manual Mode")
+            self.modeButton.setStyleSheet("background-color: blue; color: white;")
 
 
-
-
-
-def onOpen():
-    """Відкриття обраного порту"""
-    serial.setPortName(ui.comL.currentText())
-    serial.open(QIODevice.ReadWrite)
-
-def onClose():
-    """Закриття порту"""
-    serial.close()
-
-def clearGraph():
-    """Очищення графіку"""
-    ui.graph.clear()
-    global physicalListValue
-    physicalListValue = [[], [], []]
-
-def saveData():
-    """Збереження даних у csv файл"""
-    global listValue
-    myData = [["X", "Y", "Z"]]
-    for i in range(len(listValue[0])):
-        myData.append([listValue[0][i], listValue[1][i], listValue[2][i]])
-    myFile = open('data.csv', 'w')
-    with myFile:
-        writ = writer(myFile)
-        writ.writerows(myData)
-    print("Writing complete")
-
-
-"""постійне считування данних з порту"""
-serial.readyRead.connect(onRead)
-
-"""опрацювання натиску на кнопки графічного інтерфейсу"""
-ui.openB.clicked.connect(onOpen)
-ui.clearB.clicked.connect(clearGraph)
-ui.closeB.clicked.connect(onClose)
-ui.outputButton.clicked.connect(saveData)
-
-"""запуск програми"""
-ui.show()
+app = QtWidgets.QApplication([])
+window = MainWindow()
+window.show()
 app.exec()

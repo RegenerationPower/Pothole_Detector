@@ -1,0 +1,8 @@
+../Core/Src/WH1602.c:28:6:Delay_us	2
+../Core/Src/WH1602.c:38:13:sendCommand4bit	1
+../Core/Src/WH1602.c:50:13:sendCommand	1
+../Core/Src/WH1602.c:57:13:setCursor	2
+../Core/Src/WH1602.c:70:6:displayOn	1
+../Core/Src/WH1602.c:77:6:LCD_PutString	5
+../Core/Src/WH1602.c:109:6:LCD_Clear	1
+../Core/Src/WH1602.c:115:6:LCD_Init	2
