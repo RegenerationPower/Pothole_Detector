@@ -1,2 +1,5 @@
-.metadata/
-Pothole_Detector/.settings/
+/Pothole_Detector_Python/.idea/
+/Pothole_Detector_Python/venv/
+/Pothole_Detector_Stm32_copy/
+/Pothole_Detector_Stm32/.metadata/
+/Pothole_Detector_Stm32/Pothole_Detector/.settings/

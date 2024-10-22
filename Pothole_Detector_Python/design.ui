@@ -1,0 +1,204 @@
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="leftMargin">
+     <number>20</number>
+    </property>
+    <property name="topMargin">
+     <number>20</number>
+    </property>
+    <property name="rightMargin">
+     <number>20</number>
+    </property>
+    <property name="bottomMargin">
+     <number>20</number>
+    </property>
+    <item>
+     <layout class="QHBoxLayout" name="topLayout">
+      <item>
+       <widget class="QComboBox" name="comL"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="openB">
+        <property name="text">
+         <string>OPEN</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="closeB">
+        <property name="text">
+         <string>CLOSE</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="settingsButton">
+        <property name="icon">
+         <iconset>
+          <normaloff>img/moon-icon.png</normaloff>
+         </iconset>
+        </property>
+        <property name="toolTip">
+         <string>Settings</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="modeButton">
+        <property name="text">
+         <string>Switch to Manual Mode</string>
+        </property>
+        <property name="toolTip">
+         <string>Switch between automatic and manual mode</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="labelLayout">
+      <item>
+       <widget class="QLabel" name="Xlabel">
+        <property name="text">
+         <string>X: 0</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Ylabel">
+        <property name="text">
+         <string>Y: 0</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Zlabel">
+        <property name="text">
+         <string>Z: 0</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="latitudeLabel">
+        <property name="text">
+         <string>Latitude: N/A</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="longitudeLabel">
+        <property name="text">
+         <string>Longitude: N/A</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="statusLabel">
+        <property name="text">
+         <string>Status: Smooth</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: green; color: white;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="PlotWidget" name="graph" native="true"/>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="bottomLayout">
+      <item>
+       <widget class="QCheckBox" name="XcheckBox">
+        <property name="text">
+         <string>X (red)</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="YcheckBox">
+        <property name="text">
+         <string>Y (green)</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="ZcheckBox">
+        <property name="text">
+         <string>Z (blue)</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="clearB">
+        <property name="text">
+         <string>Clear</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="outputButton">
+        <property name="text">
+         <string>Save data</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QLCDNumber" name="lcdNumber">
+      <property name="digitCount">
+       <number>8</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QWidget</extends>
+   <header>pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
